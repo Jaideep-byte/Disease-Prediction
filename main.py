@@ -91,7 +91,8 @@ def predict():
     
     recs = get_recommendations(disease, form_values)
     
-    template_name = f'templates/result_{disease}.html'
+    # --- THIS LINE IS THE FIX ---
+    template_name = f'result_{disease}.html'
     return render_template(template_name, result=result, confidence=confidence, recommendations=recs)
 
 if __name__ == '__main__':
