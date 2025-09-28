@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Disease Input Form</title>
+  <link rel="stylesheet" href="/static/style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Disease Diagnosis Input</h1>
+    
+    <form action="/predict" method="post" id="disease-form">
+      <div class="input-group">
+        <label for="disease">Select Disease</label>
+        <select id="disease" name="disease" required>
+          <option value="cancer">Breast Cancer</option>
+          <option value="diabetes">Diabetes</option>
+          <option value="heart">Heart Disease</option>
+          <option value="kidney">Kidney Disease</option>
+          <option value="lipid">Lipid Profile</option>
+        </select>
+      </div>
+
+      <div id="input-fields">
+          </div>
+
+      <input type="submit" value="Predict Disease" />
+    </form>
+  </div>
+
+  <div class="chatbot-container">
+    <div id="chatbot-toggler">
+      <i class="fas fa-comment-dots"></i>
+    </div>
+    <div class="chatbot">
+      <div class="chatbot-header">
+        <h2>Health Assistant</h2>
+      </div>
+      <ul class="chatbox">
+        <li class="chat incoming">
+          <i class="fas fa-robot"></i>
+          <p>Hi there! How can I help you today? Ask about ideal glucose, BMI, or blood pressure.</p>
+        </li>
+      </ul>
+      <div class="chat-input">
+        <textarea placeholder="Enter a message..." required></textarea>
+        <span id="send-btn"><i class="fas fa-paper-plane"></i></span>
+      </div>
+    </div>
+  </div>
+  
+  <script src="/static/input.js"></script>
+  <script src="/static/chatbot.js"></script>
+</body>
+</html>
