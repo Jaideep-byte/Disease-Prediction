@@ -91,8 +91,7 @@ def predict():
             scaler = joblib.load(scaler_path)
             feature_array = scaler.transform(feature_array)
         except FileNotFoundError:
-            # Not all models might have a scaler, so we don't return an error
-            pass 
+            pass # Not all models might have a scaler
 
     # --- Prediction Logic ---
     prediction = model.predict(feature_array)[0]
@@ -121,4 +120,3 @@ def predict():
 
 if __name__ == '__main__':
     app.run(debug=True)
-
