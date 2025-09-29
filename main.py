@@ -10,7 +10,6 @@ def get_recommendations(disease, user_input):
     recommendations = []
     
     if disease == 'diabetes':
-        # Use .get() with a default of 0 to prevent errors if a key is missing
         if user_input.get('Glucose', 0) > 140:
             recommendations.append("Your Glucose level is high. Consider reducing sugar intake and consult a doctor.")
         if user_input.get('BMI', 0) > 24.9:
@@ -35,6 +34,7 @@ def get_recommendations(disease, user_input):
 def home():
     return render_template('index.html')
 
+# --- THIS IS THE FIX: Changed route from '/input_page' to '/input' ---
 @app.route('/input')
 def input_page():
     return render_template('input.html')
@@ -56,26 +56,43 @@ def predict():
     input_data = list(form_values.values())
     feature_array = np.array(input_data).reshape(1, -1)
 
-    # Map the form dropdown value 'lipid' to the model filename 'lipd'
-    model_filename_map = {'lipid': 'lipd'} 
-    filename_prefix = model_filename_map.get(disease, disease)
+    # Map form values to correct model filenames
+    model_filename_map = {
+        'cancer': 'brca_xgboost_model',
+        'diabetes': 'diabetes_xgboost_model_improved',
+        'heart': 'heart_xgboost_model',
+        'kidney': 'kidney_disease_xgboost_model',
+        'liver': 'liver_xgboost_model_improved',
+        'lipid': 'lipd_model' # Assuming this is still the correct name
+    }
+    scaler_filename_map = {
+        'cancer': 'brca_scaler',
+        'diabetes': 'diabetes_scaler',
+        'heart': 'heart_scaler',
+        'kidney': 'kidney_scaler',
+        'liver': 'liver_scaler',
+        'lipid': 'lipd_scaler' # Assuming this is still the correct name
+    }
 
+    model_name = model_filename_map.get(disease)
+    
     # Load the specific model required for the prediction
     try:
-        model_path = f'models/{filename_prefix}_model.pkl'
+        model_path = f'models/{model_name}.pkl'
         model = joblib.load(model_path)
     except FileNotFoundError:
         return f"Error: Model file not found at {model_path}", 400
 
     # Apply scaler only if it exists for the selected disease
-    diseases_with_scalers = ['heart', 'kidney', 'lipid']
-    if disease in diseases_with_scalers:
+    if disease in scaler_filename_map:
         try:
-            scaler_path = f'models/{filename_prefix}_scaler.pkl'
+            scaler_name = scaler_filename_map.get(disease)
+            scaler_path = f'models/{scaler_name}.pkl'
             scaler = joblib.load(scaler_path)
             feature_array = scaler.transform(feature_array)
         except FileNotFoundError:
-            return f"Error: Scaler file not found at {scaler_path}", 400
+            # Not all models might have a scaler, so we don't return an error
+            pass 
 
     # --- Prediction Logic ---
     prediction = model.predict(feature_array)[0]
@@ -91,11 +108,12 @@ def predict():
         'diabetes': {1: 'Diabetic', 0: 'Not Diabetic'},
         'heart': {1: 'High Risk of Heart Disease', 0: 'Low Risk of Heart Disease'},
         'kidney': {1: 'Kidney Disease Detected', 0: 'No Kidney Disease Detected'},
+        'liver': {1: 'Liver Disease Detected', 0: 'Normal (No Liver Disease)'},
         'lipid': {1: 'Lipid Profile Disorder Detected', 0: 'Normal Lipid Profile'}
     }
     result = result_map[disease].get(prediction, "Unknown result")
     
-    # --- GET RECOMMENDATIONS AND PASS TO TEMPLATE ---
+    # Get recommendations and pass to the template
     recs = get_recommendations(disease, form_values)
     
     template_name = f'result_{disease}.html'
@@ -103,3 +121,4 @@ def predict():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
