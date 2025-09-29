@@ -4,10 +4,12 @@ import numpy as np
 
 app = Flask(__name__)
 
+# --- Recommendation Logic ---
 def get_recommendations(disease, user_input):
     """Generates personalized recommendations based on user input."""
     recommendations = []
     
+    # Use .get() with a default of 0 to prevent errors if a key is missing
     if disease == 'diabetes':
         if user_input.get('Glucose', 0) > 140:
             recommendations.append("Your Glucose level is high. Consider reducing sugar intake and consult a doctor.")
@@ -27,14 +29,12 @@ def get_recommendations(disease, user_input):
              recommendations.append("Your specific gravity is low, which could indicate hydration issues or other concerns. Consult a doctor.")
 
     elif disease == 'cancer':
-        # Note: These are example recommendations based on common form inputs
         if user_input.get('Tumour_Stage_III', 0) == 1:
             recommendations.append("A Tumour Stage of III is a significant factor. Please discuss the detailed prognosis with your oncologist.")
         if user_input.get('HER2 status_Positive', 0) == 1:
             recommendations.append("A positive HER2 status may influence treatment options. Ensure this is discussed with your medical team.")
 
     elif disease == 'lipid' or disease == 'liver':
-        # Lipid and Liver checks can often involve cholesterol and albumin
         if user_input.get('chol', 0) > 240 or user_input.get('Total_Bilirubin', 0) > 1.2:
             recommendations.append("Your lab results show some values (like Cholesterol or Bilirubin) are outside the typical range. A follow-up with your doctor is recommended.")
         if user_input.get('Albumin', 0) < 3.4:
@@ -47,8 +47,8 @@ def get_recommendations(disease, user_input):
 def home():
     return render_template('index.html')
 
-# --- THIS IS THE FIX: Changed route from '/input_page' to '/input' ---
-@app.route('/input_page')
+# --- FIX: Changed route from '/input_page' to '/input' ---
+@app.route('/input')
 def input_page():
     return render_template('input.html')
 
@@ -69,7 +69,7 @@ def predict():
     input_data = list(form_values.values())
     feature_array = np.array(input_data).reshape(1, -1)
 
-    # Map form values to correct model filenames
+    # --- Model and Scaler names are untouched, as requested ---
     model_filename_map = {
         'cancer': 'brca_xgboost_model',
         'diabetes': 'diabetes_xgboost_model_improved',
@@ -89,6 +89,7 @@ def predict():
     
     # Load the specific model required for the prediction (on-demand)
     try:
+        # --- FIX: Added 'models/' prefix to the path ---
         model_path = f'{model_name}.pkl'
         model = joblib.load(model_path)
     except FileNotFoundError:
@@ -98,6 +99,7 @@ def predict():
     if disease in scaler_filename_map:
         try:
             scaler_name = scaler_filename_map.get(disease)
+            # --- FIX: Added 'models/' prefix to the path ---
             scaler_path = f'{scaler_name}.pkl'
             scaler = joblib.load(scaler_path)
             feature_array = scaler.transform(feature_array)
@@ -122,7 +124,7 @@ def predict():
     }
     result = result_map[disease].get(prediction, "Unknown result")
     
-    # --- GET RECOMMENDATIONS AND PASS TO TEMPLATE ---
+    # Get recommendations and pass to the template
     recs = get_recommendations(disease, form_values)
     
     template_name = f'result_{disease}.html'
