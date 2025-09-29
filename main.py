@@ -62,23 +62,21 @@ def predict():
         'diabetes': 'diabetes_xgboost_model_improved',
         'heart': 'heart_xgboost_model',
         'kidney': 'kidney_disease_xgboost_model',
-        'liver': 'liver_xgboost_model_improved',
-        'lipid': 'lipd_model' # Assuming this is still the correct name
+        'liver': 'liver_xgboost_model_improved'
     }
     scaler_filename_map = {
         'cancer': 'brca_scaler',
         'diabetes': 'diabetes_scaler',
         'heart': 'heart_scaler',
         'kidney': 'kidney_scaler',
-        'liver': 'liver_scaler',
-        'lipid': 'lipd_scaler' # Assuming this is still the correct name
+        'liver': 'liver_scaler'
     }
 
     model_name = model_filename_map.get(disease)
     
     # Load the specific model required for the prediction (on-demand)
     try:
-        model_path = f'models/{model_name}.pkl'
+        model_path = f'{model_name}.pkl'
         model = joblib.load(model_path)
     except FileNotFoundError:
         return f"Error: Model file not found at {model_path}", 400
@@ -87,7 +85,7 @@ def predict():
     if disease in scaler_filename_map:
         try:
             scaler_name = scaler_filename_map.get(disease)
-            scaler_path = f'models/{scaler_name}.pkl'
+            scaler_path = f'{scaler_name}.pkl'
             scaler = joblib.load(scaler_path)
             feature_array = scaler.transform(feature_array)
         except FileNotFoundError:
@@ -107,8 +105,7 @@ def predict():
         'diabetes': {1: 'Diabetic', 0: 'Not Diabetic'},
         'heart': {1: 'High Risk of Heart Disease', 0: 'Low Risk of Heart Disease'},
         'kidney': {1: 'Kidney Disease Detected', 0: 'No Kidney Disease Detected'},
-        'liver': {1: 'Liver Disease Detected', 0: 'Normal (No Liver Disease)'},
-        'lipid': {1: 'Lipid Profile Disorder Detected', 0: 'Normal Lipid Profile'}
+        'liver': {1: 'Liver Disease Detected', 0: 'Normal (No Liver Disease)'}
     }
     result = result_map[disease].get(prediction, "Unknown result")
     
