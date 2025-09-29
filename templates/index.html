@@ -21,6 +21,12 @@
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
         text-align: center;
         max-width: 450px;
+        
+        /* --- CORRECTION STARTS HERE --- */
+        display: flex;          /* 1. Make the card a flex container */
+        flex-direction: column; /* 2. Stack items vertically */
+        align-items: center;    /* 3. Center all items horizontally */
+        /* --- CORRECTION ENDS HERE --- */
     }
     .title {
         font-size: 2em;
@@ -50,6 +56,8 @@
         display: inline-block;
         margin-top: 25px;
         transition: background-color 0.3s ease;
+        width: 100%;       /* Optional: Makes the button width more consistent */
+        max-width: 280px;  /* Optional: Prevents button from being too wide */
     }
     .start-btn:hover {
         background-color: #005fa3;

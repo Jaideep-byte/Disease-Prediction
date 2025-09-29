@@ -42,7 +42,34 @@ body {
     transition: background-color 0.3s, color 0.3s;
 }
 
-.container, .card {
+/* --- Main Home Page Container --- */
+.main-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+/* --- Card Styling (Correction Applied Here) --- */
+.card {
+    background-color: var(--card-bg-color);
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px var(--shadow-color);
+    width: 100%;
+    max-width: 450px; /* Max-width for the home card */
+    text-align: center;
+    position: relative;
+    transition: background-color 0.3s;
+
+    /* Key fix: Use Flexbox to center all content inside the card */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Generic container for other pages */
+.container {
     background-color: var(--card-bg-color);
     padding: 30px 40px;
     border-radius: 15px;
@@ -54,10 +81,51 @@ body {
     transition: background-color 0.3s;
 }
 
-h1 {
+/* --- Home Page Specific Elements --- */
+.title, h1 {
     color: var(--text-color);
     margin-bottom: 25px;
+    font-size: 2em;
 }
+
+.main-image {
+    width: 150px;
+    height: auto;
+    margin-bottom: 25px;
+}
+
+.info p {
+    font-size: 1.1em;
+    color: var(--subtle-text-color);
+    margin: 8px 0;
+}
+
+/* --- Buttons --- */
+input[type="submit"],
+.predict-button,
+.start-btn {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 14px 30px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 100%;
+    max-width: 280px; /* Set a max-width for aesthetic balance */
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-block;
+    margin-top: 25px;
+    transition: background-color 0.3s ease;
+}
+
+input[type="submit"]:hover,
+.predict-button:hover,
+.start-btn:hover {
+    background-color: var(--primary-hover-color);
+}
+
 
 /* --- Theme Toggle Switch --- */
 .theme-switch {
@@ -106,29 +174,6 @@ h1 {
     gap: 15px;
 }
 
-input[type="submit"],
-.predict-button,
-.start-btn {
-    background-color: var(--primary-color);
-    color: white;
-    padding: 14px 20px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    width: 100%;
-    font-size: 1.1rem;
-    font-weight: 600;
-    text-decoration: none;
-    display: inline-block;
-    margin-top: 20px;
-    transition: background-color 0.3s ease;
-}
-
-input[type="submit"]:hover,
-.predict-button:hover,
-.start-btn:hover {
-    background-color: var(--primary-hover-color);
-}
 
 /* --- Result Card Styles --- */
 .result-card {
@@ -303,13 +348,12 @@ input[type="submit"]:hover,
     color: var(--text-color);
 }
 
-/* Media Query for smaller screens */
+/* --- Media Query for smaller screens --- */
 @media (max-width: 650px) {
     #input-fields {
         grid-template-columns: 1fr;
     }
-    .container {
+    .container, .card {
         padding: 20px;
     }
 }
-

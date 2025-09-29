@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Disease Input Form</title>
   <link rel="stylesheet" href="/static/style.css" />
-  <!-- Font Awesome for icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
@@ -23,20 +22,17 @@
           <option value="diabetes">Diabetes</option>
           <option value="heart">Heart Disease</option>
           <option value="kidney">Kidney Disease</option>
-          <option value="lipid">Lipid Profile</option>
           <option value="liver">Liver Disease</option>
         </select>
       </div>
 
       <div id="input-fields">
-          <!-- Input fields will be dynamically generated here by input.js -->
-      </div>
+          </div>
 
       <input type="submit" value="Predict Disease" />
     </form>
   </div>
 
-  <!-- Chatbot HTML Code -->
   <div class="chatbot-container">
     <div id="chatbot-toggler">
       <i class="fas fa-comment-dots"></i>
@@ -58,26 +54,8 @@
     </div>
   </div>
   
-  <!-- JavaScript files for the page -->
   <script src="/static/input.js"></script>
   <script src="/static/chatbot.js"></script>
   <script src="/static/theme.js"></script> 
 </body>
 </html>
-```
-
-***
-
-### **Action Required for `index.html` and all `result_*.html` pages**
-
-To add the theme switcher to your other pages, you need to make two small edits to each of them.
-
-1.  **Add the button**: Copy and paste this line right inside your main `div` (e.g., inside `div.card` or `div.container`).
-    ```html
-    <button class="theme-switch" id="theme-switch" aria-label="Toggle theme"><i class="fas fa-moon"></i></button>
-    ```
-2.  **Add the script**: Copy and paste this line right before the closing `</body>` tag.
-    ```html
-    <script src="/static/theme.js"></script>
-    
-
