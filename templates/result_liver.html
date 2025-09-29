@@ -9,6 +9,10 @@
 </head>
 <body>
   <div class="container">
+    <button class="theme-switch" id="theme-switch" aria-label="Toggle theme">
+      <i class="fas fa-moon"></i>
+    </button>
+
     <div class="result-card">
       {% if "Normal" in result %}
         <div class="result-icon negative"><i class="fas fa-check-circle"></i></div>
@@ -42,5 +46,7 @@
       <a href="/input_page" class="back-btn">Test Another</a>
     </div>
   </div>
+
+  <script src="/static/theme.js"></script>
 </body>
 </html>
