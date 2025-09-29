@@ -48,7 +48,7 @@ def home():
     return render_template('index.html')
 
 # --- FIX: Changed route from '/input_page' to '/input' ---
-@app.route('/input')
+@app.route('/input_page')
 def input_page():
     return render_template('input.html')
 
