@@ -2,8 +2,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const diseaseSelect = document.getElementById("disease");
     const inputFieldsContainer = document.getElementById("input-fields");
 
-    // This object now has consistent lowercase 'name' attributes for all fields
-    const diseaseFields = {
+    // The main object containing all field definitions
+    const allDiseaseFields = {
         'cancer': [
             { name: 'age', label: 'Age' },
             { name: 'gender', label: 'Gender (0: Female, 1: Male)'},
@@ -38,7 +38,6 @@ document.addEventListener("DOMContentLoaded", () => {
             { name: 'thal', label: 'Thalassemia (1=normal; 2=fixed defect; 3=reversable defect)' }
         ],
         'kidney': [
-            // Simplified to match the backend recommendation logic
             { name: 'age', label: 'Age' },
             { name: 'blood_pressure', label: 'Blood Pressure' },
             { name: 'specific_gravity', label: 'Specific Gravity' },
@@ -56,20 +55,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function generateFields(disease) {
         inputFieldsContainer.innerHTML = '';
-        const diseaseFields = diseaseFields[disease];
-        if (!diseaseFields) return;
+        
+        // **FIX:** The variable name here is corrected to avoid a conflict.
+        const fieldsToCreate = allDiseaseFields[disease];
+        if (!fieldsToCreate) return;
 
-        diseaseFields.forEach(field => {
+        fieldsToCreate.forEach(field => {
             const div = document.createElement('div');
             div.className = 'input-group';
             
             const label = document.createElement('label');
-            label.textContent = field.label; // Use the 'label' property for the text
+            label.textContent = field.label;
             
             const input = document.createElement('input');
             input.type = 'number';
             input.step = 'any';
-            input.name = field.name; // This is now correctly lowercase
+            input.name = field.name;
             input.placeholder = 'Enter value';
             input.required = true;
             
@@ -79,6 +80,9 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    // Generate fields for the initially selected disease
     generateFields(diseaseSelect.value);
+    
+    // Add event listener to regenerate fields when the selection changes
     diseaseSelect.addEventListener('change', (event) => generateFields(event.target.value));
 });
