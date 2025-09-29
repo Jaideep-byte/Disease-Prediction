@@ -1,3 +1,5 @@
+// input.js
+
 document.addEventListener("DOMContentLoaded", () => {
     const diseaseSelect = document.getElementById("disease");
     const inputFieldsContainer = document.getElementById("input-fields");
@@ -38,11 +40,27 @@ document.addEventListener("DOMContentLoaded", () => {
             { name: 'thal', label: 'Thalassemia (1=normal; 2=fixed defect; 3=reversable defect)' }
         ],
         'kidney': [
-            { name: 'age', label: 'Age' },
-            { name: 'blood_pressure', label: 'Blood Pressure' },
-            { name: 'specific_gravity', label: 'Specific Gravity' },
-            { name: 'albumin', label: 'Albumin' },
-            { name: 'sugar', label: 'Sugar' }
+            // --- UPDATED AND EXPANDED LIST FOR KIDNEY DISEASE ---
+            { name: 'age', label: 'Age (years)' },
+            { name: 'blood_pressure', label: 'Blood Pressure (mm/Hg)' },
+            { name: 'specific_gravity', label: 'Specific Gravity (e.g., 1.020)' },
+            { name: 'albumin', label: 'Albumin (0-5)' },
+            { name: 'sugar', label: 'Sugar (0-5)' },
+            { name: 'red_blood_cells', label: 'Red Blood Cells (0: Abnormal, 1: Normal)' },
+            { name: 'pus_cell', label: 'Pus Cell (0: Abnormal, 1: Normal)' },
+            { name: 'pus_cell_clumps', label: 'Pus Cell Clumps (0: Not Present, 1: Present)' },
+            { name: 'bacteria', label: 'Bacteria (0: Not Present, 1: Present)' },
+            { name: 'blood_glucose_random', label: 'Blood Glucose Random (mgs/dL)' },
+            { name: 'blood_urea', label: 'Blood Urea (mgs/dL)' },
+            { name: 'serum_creatinine', label: 'Serum Creatinine (mgs/dL)' },
+            { name: 'sodium', label: 'Sodium (mEq/L)' },
+            { name: 'potassium', label: 'Potassium (mEq/L)' },
+            { name: 'hemoglobin', label: 'Hemoglobin (gms)' },
+            { name: 'packed_cell_volume', label: 'Packed Cell Volume (%)' },
+            { name: 'white_blood_cell_count', label: 'White Blood Cell Count (cells/cumm)' },
+            { name: 'red_blood_cell_count', label: 'Red Blood Cell Count (millions/cmm)' },
+            { name: 'hypertension', label: 'Hypertension (0: No, 1: Yes)' },
+            { name 'diabetes_mellitus', label: 'Diabetes Mellitus (0: No, 1: Yes)' }
         ],
         'liver': [
             { name: 'age', label: 'Age' }, { name: 'gender', label: 'Gender (1=M; 0=F)' },
@@ -56,7 +74,6 @@ document.addEventListener("DOMContentLoaded", () => {
     function generateFields(disease) {
         inputFieldsContainer.innerHTML = '';
         
-        // **FIX:** The variable name here is corrected to avoid a conflict.
         const fieldsToCreate = allDiseaseFields[disease];
         if (!fieldsToCreate) return;
 
@@ -65,12 +82,14 @@ document.addEventListener("DOMContentLoaded", () => {
             div.className = 'input-group';
             
             const label = document.createElement('label');
+            label.setAttribute('for', field.name);
             label.textContent = field.label;
             
             const input = document.createElement('input');
             input.type = 'number';
-            input.step = 'any';
+            input.step = 'any'; // Allows for decimal inputs
             input.name = field.name;
+            input.id = field.name;
             input.placeholder = 'Enter value';
             input.required = true;
             
@@ -80,7 +99,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Generate fields for the initially selected disease
+    // Generate fields for the initially selected disease on page load
     generateFields(diseaseSelect.value);
     
     // Add event listener to regenerate fields when the selection changes

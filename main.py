@@ -13,35 +13,36 @@ def get_recommendations(disease, user_input):
     
     # Use .get() with a default of 0 to prevent errors if a key is missing
     if disease == 'diabetes':
-        # CORRECTION: Changed 'Glucose' to 'glucose' and 'BMI' to 'bmi' (lowercase)
         if user_input.get('glucose', 0) > 140:
             recommendations.append("Your Glucose level is high. Consider reducing sugar intake and consult a doctor.")
         if user_input.get('bmi', 0) > 24.9:
             recommendations.append("Your BMI is above the normal range. Regular exercise and a balanced diet are recommended.")
             
     elif disease == 'heart':
-        # CORRECTION: Ensure your input.js for heart disease sends 'trestbps' and 'chol'
         if user_input.get('trestbps', 0) > 140:
             recommendations.append("Your resting blood pressure is high. It's advisable to monitor it regularly and consult a doctor.")
         if user_input.get('chol', 0) > 240:
             recommendations.append("Your cholesterol level is high. A diet low in saturated fats is recommended.")
 
     elif disease == 'kidney':
-        # CORRECTION: Changed 'bp' to 'blood_pressure' and 'sg' to 'specific_gravity'
+        # Expanded recommendations for the new fields
         if user_input.get('blood_pressure', 0) > 80:
              recommendations.append("Your blood pressure appears elevated. Managing blood pressure is crucial for kidney health.")
         if user_input.get('specific_gravity', 0) <= 1.010:
              recommendations.append("Your specific gravity is low, which could indicate hydration issues or other concerns. Consult a doctor.")
+        if user_input.get('hemoglobin', 0) < 13.5: # Example threshold for males
+             recommendations.append("Your hemoglobin is on the lower side, which can be associated with kidney issues. A medical review is advised.")
+        if user_input.get('blood_glucose_random', 0) > 126:
+             recommendations.append("Elevated blood glucose can impact kidney function. Please discuss this with your healthcare provider.")
 
     elif disease == 'cancer':
-        # CORRECTION: Updated logic to check the value from the form, not a one-hot encoded feature
+        # This logic correctly checks values from the form.
         if user_input.get('tumour_stage', 0) == 3:
             recommendations.append("A Tumour Stage of III is a significant factor. Please discuss the detailed prognosis with your oncologist.")
         if user_input.get('her2_status', 0) == 1: # Assuming 1 is Positive
             recommendations.append("A positive HER2 status may influence treatment options. Ensure this is discussed with your medical team.")
 
     elif disease == 'liver':
-        # CORRECTION: Matched keys like 'total_bilirubin' and added a check for it.
         if user_input.get('total_bilirubin', 0) > 1.2:
             recommendations.append("Your Bilirubin level is outside the typical range. A follow-up with your doctor is recommended.")
         if user_input.get('albumin', 0) < 3.4:
@@ -62,14 +63,18 @@ def input_page():
 def predict():
     disease = request.form['disease']
     
+    # Safely parse form values, converting to float where possible
     form_values = {}
     for key, value in request.form.items():
         if key != 'disease':
             try:
                 form_values[key] = float(value)
             except (ValueError, TypeError):
+                # Keep as is if conversion fails, though it might cause issues later if model expects numbers
                 form_values[key] = value
     
+    # Prepare the feature array for the model
+    # Note: This relies on the form fields being in the correct order.
     input_data = list(form_values.values())
     feature_array = np.array([float(i) for i in input_data]).reshape(1, -1)
 
@@ -96,6 +101,7 @@ def predict():
     except FileNotFoundError:
         return f"Error: Model file not found at {model_path}", 400
 
+    # Apply scaler if it exists for the selected disease
     if disease in scaler_filename_map:
         try:
             scaler_name = scaler_filename_map.get(disease)
@@ -103,10 +109,12 @@ def predict():
             scaler = joblib.load(scaler_path)
             feature_array = scaler.transform(feature_array)
         except FileNotFoundError:
+            # If scaler is not found, proceed without it (useful for models that don't need scaling)
             pass
 
     prediction = model.predict(feature_array)[0]
     
+    # Calculate confidence score if the model supports it
     try:
         probability = model.predict_proba(feature_array)
         confidence = round(np.max(probability) * 100, 2)
@@ -122,15 +130,13 @@ def predict():
     }
     result = result_map[disease].get(prediction, "Unknown result")
     
+    # Get personalized recommendations
     recs = get_recommendations(disease, form_values)
     
     template_name = f'result_{disease}.html'
     
-    # CORRECTION: Pass the form_values to the template for debugging
+    # Pass all relevant data to the result template
     return render_template(template_name, result=result, confidence=confidence, recommendations=recs, debug_data=form_values)
 
 if __name__ == '__main__':
     app.run(debug=True)
-
-
-
