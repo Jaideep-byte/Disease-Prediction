@@ -4,7 +4,6 @@ import numpy as np
 
 app = Flask(__name__)
 
-# --- Recommendation Logic ---
 def get_recommendations(disease, user_input):
     """Generates personalized recommendations based on user input."""
     recommendations = []
@@ -26,6 +25,20 @@ def get_recommendations(disease, user_input):
              recommendations.append("Your blood pressure appears elevated. Managing blood pressure is crucial for kidney health.")
         if user_input.get('sg', 0) <= 1.010:
              recommendations.append("Your specific gravity is low, which could indicate hydration issues or other concerns. Consult a doctor.")
+
+    elif disease == 'cancer':
+        # Note: These are example recommendations based on common form inputs
+        if user_input.get('Tumour_Stage_III', 0) == 1:
+            recommendations.append("A Tumour Stage of III is a significant factor. Please discuss the detailed prognosis with your oncologist.")
+        if user_input.get('HER2 status_Positive', 0) == 1:
+            recommendations.append("A positive HER2 status may influence treatment options. Ensure this is discussed with your medical team.")
+
+    elif disease == 'liver':
+        # Lipid and Liver checks can often involve cholesterol and albumin
+        if user_input.get('chol', 0) > 240 or user_input.get('Total_Bilirubin', 0) > 1.2:
+            recommendations.append("Your lab results show some values (like Cholesterol or Bilirubin) are outside the typical range. A follow-up with your doctor is recommended.")
+        if user_input.get('Albumin', 0) < 3.4:
+            recommendations.append("Your Albumin levels appear low. This can be related to liver or kidney health and should be reviewed by a doctor.")
 
     return recommendations
 
