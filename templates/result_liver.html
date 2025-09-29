@@ -32,6 +32,13 @@
           <small><i><b>Disclaimer:</b> This is not medical advice. Always consult a healthcare professional.</i></small>
       </div>
       {% endif %}
+      
+      {% if debug_data %}
+      <div style="text-align: left; background-color: #f0f0f0; border: 1px solid #ccc; padding: 10px; margin-top: 20px; border-radius: 5px;">
+        <h3>Debugging Information:</h3>
+        <pre><code>{{ debug_data }}</code></pre>
+      </div>
+      {% endif %}
       <a href="/input_page" class="back-btn">Test Another</a>
     </div>
   </div>

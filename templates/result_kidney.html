@@ -33,6 +33,12 @@
       </div>
       {% endif %}
 
+      {% if debug_data %}
+      <div style="text-align: left; background-color: #952525; border: 1px solid #ccc; padding: 10px; margin-top: 20px; border-radius: 5px;">
+        <h3>Debugging Information:</h3>
+        <pre><code>{{ debug_data }}</code></pre>
+      </div>
+      {% endif %}
       <a href="/" class="predict-button">Back to Home</a>
     </div>
   </div>
