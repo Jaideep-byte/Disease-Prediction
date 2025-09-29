@@ -38,11 +38,12 @@
       {% endif %}
 
       {% if debug_data %}
-      <div style="text-align: left; background-color: #f0f0f0; border: 1px solid #ccc; padding: 10px; margin-top: 20px; border-radius: 5px;">
-        <h3>Debugging Information:</h3>
-        <pre><code>{{ debug_data }}</code></pre>
+      <div class="recommendations" style="margin-top: 20px; background-color: #444; border-left-color: #666; text-align: left;">
+        <h3>Inputs Received by Server:</h3>
+        <pre style="white-space: pre-wrap; word-wrap: break-word; color: #eee;"><code>{{ debug_data }}</code></pre>
       </div>
       {% endif %}
+      
       <a href="/" class="predict-button">Back to Home</a>
     </div>
   </div>
