@@ -5,6 +5,31 @@ import pandas as pd
 
 app = Flask(__name__)
 
+# --- Recommendation Logic (No changes here) ---
+def get_recommendations(disease, user_input):
+    """Generates personalized recommendations based on user input."""
+    recommendations = []
+    
+    if disease == 'diabetes':
+        if user_input.get('Glucose', 0) > 140:
+            recommendations.append("Your Glucose level is high. Consider reducing sugar intake and consult a doctor.")
+        if user_input.get('BMI', 0) > 24.9:
+            recommendations.append("Your BMI is above the normal range. Regular exercise and a balanced diet are recommended.")
+            
+    elif disease == 'heart':
+        if user_input.get('trestbps', 0) > 140:
+            recommendations.append("Your resting blood pressure is high. It's advisable to monitor it regularly and consult a doctor.")
+        if user_input.get('chol', 0) > 240:
+            recommendations.append("Your cholesterol level is high. A diet low in saturated fats is recommended.")
+
+    elif disease == 'kidney':
+        if user_input.get('bp', 0) > 80:
+             recommendations.append("Your blood pressure appears elevated. Managing blood pressure is crucial for kidney health.")
+        if user_input.get('sg', 0) <= 1.010:
+             recommendations.append("Your specific gravity is low, which could indicate hydration issues or other concerns. Consult a doctor.")
+
+    return recommendations
+
 # --- Load All Models and Scalers ---
 models = {
     'cancer': joblib.load('brca_xgboost_model.pkl'),
