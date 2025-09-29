@@ -4,9 +4,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const diseaseSelect = document.getElementById("disease");
     const inputFieldsContainer = document.getElementById("input-fields");
 
-    // The main object containing all field definitions
     const allDiseaseFields = {
         'cancer': [
+            // Total 14 Features, names match CSV headers (with spaces handled)
             { name: 'age', label: 'Age' },
             { name: 'gender', label: 'Gender (0: Female, 1: Male)'},
             { name: 'protein1', label: 'Protein 1 Value' },
@@ -14,7 +14,9 @@ document.addEventListener("DOMContentLoaded", () => {
             { name: 'protein3', label: 'Protein 3 Value' },
             { name: 'protein4', label: 'Protein 4 Value' },
             { name: 'tumour_stage', label: 'Tumour Stage (1, 2, or 3)' },
-            { name: 'histology', label: 'Histology (1: IDCarcinoma, 2: ILCarcinoma, 3: MCarcinoma)' },
+            { name: 'histology_Infiltrating_Ductal_Carcinoma', label: 'Histology: Infiltrating Ductal Carcinoma (1=Yes, 0=No)'},
+            { name: 'histology_Infiltrating_Lobular_Carcinoma', label: 'Histology: Infiltrating Lobular Carcinoma (1=Yes, 0=No)'},
+            { name: 'histology_Mucinous_Carcinoma', label: 'Histology: Mucinous Carcinoma (1=Yes, 0=No)'},
             { name: 'er_status', label: 'ER Status (1: Positive)' },
             { name: 'pr_status', label: 'PR Status (1: Positive)' },
             { name: 'her2_status', label: 'HER2 Status (1: Positive, 0: Negative)' },
@@ -40,27 +42,35 @@ document.addEventListener("DOMContentLoaded", () => {
             { name: 'thal', label: 'Thalassemia (1=normal; 2=fixed defect; 3=reversable defect)' }
         ],
         'kidney': [
+            // Total 28 Features, names now match CSV headers exactly
             { name: 'age', label: 'Age (years)' },
-            { name: 'blood_pressure', label: 'Blood Pressure (mm/Hg)' },
-            { name: 'specific_gravity', label: 'Specific Gravity (e.g., 1.020)' },
-            { name: 'albumin', label: 'Albumin (0-5)' },
-            { name: 'sugar', label: 'Sugar (0-5)' },
-            { name: 'red_blood_cells', label: 'Red Blood Cells (0: Abnormal, 1: Normal)' },
-            { name: 'pus_cell', label: 'Pus Cell (0: Abnormal, 1: Normal)' },
-            { name: 'pus_cell_clumps', label: 'Pus Cell Clumps (0: Not Present, 1: Present)' },
-            { name: 'bacteria', label: 'Bacteria (0: Not Present, 1: Present)' },
-            { name: 'blood_glucose_random', label: 'Blood Glucose Random (mgs/dL)' },
-            { name: 'blood_urea', label: 'Blood Urea (mgs/dL)' },
-            { name: 'serum_creatinine', label: 'Serum Creatinine (mgs/dL)' },
-            { name: 'sodium', label: 'Sodium (mEq/L)' },
-            { name: 'potassium', label: 'Potassium (mEq/L)' },
-            { name: 'hemoglobin', label: 'Hemoglobin (gms)' },
-            { name: 'packed_cell_volume', label: 'Packed Cell Volume (%)' },
-            { name: 'white_blood_cell_count', label: 'White Blood Cell Count (cells/cumm)' },
-            { name: 'red_blood_cell_count', label: 'Red Blood Cell Count (millions/cmm)' },
-            { name: 'hypertension', label: 'Hypertension (0: No, 1: Yes)' },
-            // --- THIS LINE IS NOW CORRECTED ---
-            { name: 'diabetes_mellitus', label: 'Diabetes Mellitus (0: No, 1: Yes)' }
+            { name: 'bp', label: 'Blood Pressure (bp)' },
+            { name: 'sg_1.005', label: 'Specific Gravity is 1.005 (1=Yes, 0=No)' },
+            { name: 'sg_1.010', label: 'Specific Gravity is 1.010 (1=Yes, 0=No)' },
+            { name: 'sg_1.015', label: 'Specific Gravity is 1.015 (1=Yes, 0=No)' },
+            { name: 'sg_1.020', label: 'Specific Gravity is 1.020 (1=Yes, 0=No)' },
+            { name: 'sg_1.025', label: 'Specific Gravity is 1.025 (1=Yes, 0=No)' },
+            { name: 'al', label: 'Albumin (al)' },
+            { name: 'su', label: 'Sugar (su)' },
+            { name: 'rbc', label: 'Red Blood Cells (rbc) (0: Abnormal, 1: Normal)' },
+            { name: 'pc', label: 'Pus Cell (pc) (0: Abnormal, 1: Normal)' },
+            { name: 'pcc', label: 'Pus Cell Clumps (pcc) (0: Not Present, 1: Present)' },
+            { name: 'ba', label: 'Bacteria (ba) (0: Not Present, 1: Present)' },
+            { name: 'bgr', label: 'Blood Glucose Random (bgr)' },
+            { name: 'bu', label: 'Blood Urea (bu)' },
+            { name: 'sc', label: 'Serum Creatinine (sc)' },
+            { name: 'sod', label: 'Sodium (sod)' },
+            { name: 'pot', label: 'Potassium (pot)' },
+            { name: 'hemo', label: 'Hemoglobin (hemo)' },
+            { name: 'pcv', label: 'Packed Cell Volume (pcv)' },
+            { name: 'wc', label: 'White Blood Cell Count (wc)' },
+            { name: 'rc', label: 'Red Blood Cell Count (rc)' },
+            { name: 'htn', label: 'Hypertension (htn) (0: No, 1: Yes)' },
+            { name: 'dm', label: 'Diabetes Mellitus (dm) (0: No, 1: Yes)' },
+            { name: 'cad', label: 'Coronary Artery Disease (cad) (0: No, 1: Yes)'},
+            { name: 'appet', label: 'Appetite (appet) (0: Poor, 1: Good)'},
+            { name: 'pe', label: 'Pedal Edema (pe) (0: No, 1: Yes)'},
+            { name: 'ane', label: 'Anemia (ane) (0: No, 1: Yes)'}
         ],
         'liver': [
             { name: 'age', label: 'Age' }, { name: 'gender', label: 'Gender (1=M; 0=F)' },
@@ -73,35 +83,28 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function generateFields(disease) {
         inputFieldsContainer.innerHTML = '';
-        
         const fieldsToCreate = allDiseaseFields[disease];
         if (!fieldsToCreate) return;
 
         fieldsToCreate.forEach(field => {
             const div = document.createElement('div');
             div.className = 'input-group';
-            
             const label = document.createElement('label');
             label.setAttribute('for', field.name);
             label.textContent = field.label;
-            
             const input = document.createElement('input');
             input.type = 'number';
-            input.step = 'any'; // Allows for decimal inputs
+            input.step = 'any';
             input.name = field.name;
             input.id = field.name;
             input.placeholder = 'Enter value';
             input.required = true;
-            
             div.appendChild(label);
             div.appendChild(input);
             inputFieldsContainer.appendChild(div);
         });
     }
 
-    // Generate fields for the initially selected disease on page load
     generateFields(diseaseSelect.value);
-    
-    // Add event listener to regenerate fields when the selection changes
     diseaseSelect.addEventListener('change', (event) => generateFields(event.target.value));
 });

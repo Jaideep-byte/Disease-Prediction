@@ -3,15 +3,23 @@
 from flask import Flask, request, render_template
 import joblib
 import numpy as np
+import os # <-- ADD THIS LINE
 
-app = Flask(__name__)
+# --- THIS IS THE FIX ---
+# Get the absolute path of the directory where this file is located
+basedir = os.path.abspath(os.path.dirname(__file__))
+# Point to the templates folder
+template_folder_path = os.path.join(basedir, 'templates')
+# Explicitly tell Flask where to find the templates
+app = Flask(__name__, template_folder=template_folder_path)
+# ----------------------
+
 
 # --- Recommendation Logic ---
 def get_recommendations(disease, user_input):
     """Generates personalized recommendations based on user input."""
     recommendations = []
     
-    # Use .get() with a default of 0 to prevent errors if a key is missing
     if disease == 'diabetes':
         if user_input.get('glucose', 0) > 140:
             recommendations.append("Your Glucose level is high. Consider reducing sugar intake and consult a doctor.")
@@ -37,7 +45,7 @@ def get_recommendations(disease, user_input):
     elif disease == 'cancer':
         if user_input.get('tumour_stage', 0) == 3:
             recommendations.append("A Tumour Stage of III is a significant factor. Please discuss the detailed prognosis with your oncologist.")
-        if user_input.get('her2_status', 0) == 1: # Assuming 1 is Positive
+        if user_input.get('her2_status', 0) == 1:
             recommendations.append("A positive HER2 status may influence treatment options. Ensure this is discussed with your medical team.")
 
     elif disease == 'liver':
