@@ -33,7 +33,7 @@ def get_recommendations(disease, user_input):
         if user_input.get('HER2 status_Positive', 0) == 1:
             recommendations.append("A positive HER2 status may influence treatment options. Ensure this is discussed with your medical team.")
 
-    elif disease == 'liver':
+    elif disease == 'lipid' or disease == 'liver':
         # Lipid and Liver checks can often involve cholesterol and albumin
         if user_input.get('chol', 0) > 240 or user_input.get('Total_Bilirubin', 0) > 1.2:
             recommendations.append("Your lab results show some values (like Cholesterol or Bilirubin) are outside the typical range. A follow-up with your doctor is recommended.")

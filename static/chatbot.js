@@ -5,7 +5,45 @@ document.addEventListener("DOMContentLoaded", () => {
     const sendChatBtn = document.querySelector("#send-btn");
     const chatbox = document.querySelector(".chatbox");
 
-    chatbotToggler.addEventListener("click", () => chatbotContainer.classList.toggle("show-chatbot"));
+    // --- The Chatbot's Expanded Brain ---
+    const knowledgeBase = {
+        greetings: {
+            keywords: ["hello", "hi", "hey", "yo"],
+            response: "Hello! I'm a simple health bot. You can ask me about general wellness topics. Type 'help' to see what I know about."
+        },
+        bmi: {
+            keywords: ["bmi", "body mass index"],
+            response: "Body Mass Index (BMI) is a measure of body fat based on height and weight. Here are the standard ranges:<br>• Below 18.5: Underweight<br>• 18.5 - 24.9: Healthy Weight<br>• 25.0 - 29.9: Overweight<br>• 30.0 and Above: Obesity"
+        },
+        glucose: {
+            keywords: ["glucose", "sugar", "blood sugar"],
+            response: "For an adult, a normal fasting blood glucose level is typically less than 100 mg/dL. A level of 126 mg/dL or higher on two separate tests often indicates diabetes."
+        },
+        blood_pressure: {
+            keywords: ["blood pressure", "bp", "hypertension"],
+            response: "An ideal blood pressure is typically considered to be between 90/60mmHg and 120/80mmHg. High blood pressure (hypertension) is considered to be 140/90mmHg or higher."
+        },
+        heart_rate: {
+            keywords: ["heart rate", "pulse"],
+            response: "A normal resting heart rate for adults ranges from 60 to 100 beats per minute. Generally, a lower heart rate at rest implies more efficient heart function and better cardiovascular fitness."
+        },
+        hydration: {
+            keywords: ["water", "hydrate", "hydration", "drink"],
+            response: "Staying hydrated is crucial for your health. A common recommendation is to drink about 8 glasses (around 2 liters or half a gallon) of water a day. This can vary depending on your activity level and climate."
+        },
+        diet: {
+            keywords: ["diet", "food", "eat", "nutrition"],
+            response: "A healthy diet emphasizes:<br>• Eating plenty of fruits, vegetables, whole grains, and lean proteins.<br>• Limiting processed foods, sugary drinks, and saturated fats.<br>• Watching portion sizes. A balanced diet is key to good health."
+        },
+        exercise: {
+            keywords: ["exercise", "workout", "fitness", "active"],
+            response: "Regular physical activity is vital. It's generally recommended to get at least:<br>• 150 minutes of moderate aerobic activity (like brisk walking) per week.<br>OR<br>• 75 minutes of vigorous aerobic activity (like running) per week.<br> Strength training for all major muscle groups at least two times a week is also recommended."
+        },
+        help: {
+            keywords: ["help", "what can you do", "topics"],
+            response: "I can provide general information on the following topics:<br>• BMI<br>• Glucose<br>• Blood Pressure<br>• Heart Rate<br>• Hydration<br>• Diet<br>• Exercise"
+        }
+    };
 
     const createChatLi = (message, className) => {
         const chatLi = document.createElement("li");
@@ -17,34 +55,40 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const generateResponse = (userMessage) => {
         const message = userMessage.toLowerCase();
-        let response = "I'm sorry, I don't understand that. You can ask me about ideal glucose, BMI, or blood pressure.";
+        let botResponse = "I'm sorry, I don't have information on that topic. Type 'help' to see what I can answer.";
 
-        if (message.includes("glucose") || message.includes("sugar")) {
-            response = "For an adult, a normal fasting blood glucose level is less than 100 mg/dL. A level of 126 mg/dL or higher on two separate tests indicates diabetes.";
-        } else if (message.includes("bmi")) {
-            response = "Body Mass Index (BMI) ranges are: <br> • Below 18.5: Underweight <br> • 18.5 - 24.9: Healthy Weight <br> • 25.0 - 29.9: Overweight <br> • 30.0 and Above: Obesity";
-        } else if (message.includes("blood pressure") || message.includes("bp")) {
-            response = "An ideal blood pressure is typically considered to be between 90/60mmHg and 120/80mmHg. High blood pressure (hypertension) is considered to be 140/90mmHg or higher.";
-        } else if (message.includes("hello") || message.includes("hi")) {
-            response = "Hello! I'm a simple health bot. How can I assist you?";
+        // Find the best response from the knowledge base
+        for (const key in knowledgeBase) {
+            const topic = knowledgeBase[key];
+            if (topic.keywords.some(keyword => message.includes(keyword))) {
+                botResponse = topic.response;
+                break; // Stop searching once a match is found
+            }
         }
 
-        const incomingChatLi = createChatLi(response, "incoming");
+        const incomingChatLi = createChatLi(botResponse, "incoming");
         chatbox.appendChild(incomingChatLi);
         chatbox.scrollTo(0, chatbox.scrollHeight);
     }
 
     const handleChat = () => {
         const userMessage = chatInput.value.trim();
-        if(!userMessage) return;
+        if (!userMessage) return;
 
         chatbox.appendChild(createChatLi(userMessage, "outgoing"));
         chatInput.value = "";
         chatbox.scrollTo(0, chatbox.scrollHeight);
 
+        // Add a "thinking" indicator
+        const thinkingLi = createChatLi("...", "incoming");
+        chatbox.appendChild(thinkingLi);
+        chatbox.scrollTo(0, chatbox.scrollHeight);
+
         setTimeout(() => {
+            // Remove "thinking" and get the real response
+            thinkingLi.remove();
             generateResponse(userMessage);
-        }, 600);
+        }, 800); // A slightly longer delay to feel more natural
     }
 
     sendChatBtn.addEventListener("click", handleChat);
@@ -55,3 +99,4 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 });
+
