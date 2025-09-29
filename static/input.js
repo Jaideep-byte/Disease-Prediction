@@ -40,7 +40,6 @@ document.addEventListener("DOMContentLoaded", () => {
             { name: 'thal', label: 'Thalassemia (1=normal; 2=fixed defect; 3=reversable defect)' }
         ],
         'kidney': [
-            // --- UPDATED AND EXPANDED LIST FOR KIDNEY DISEASE ---
             { name: 'age', label: 'Age (years)' },
             { name: 'blood_pressure', label: 'Blood Pressure (mm/Hg)' },
             { name: 'specific_gravity', label: 'Specific Gravity (e.g., 1.020)' },
@@ -60,7 +59,8 @@ document.addEventListener("DOMContentLoaded", () => {
             { name: 'white_blood_cell_count', label: 'White Blood Cell Count (cells/cumm)' },
             { name: 'red_blood_cell_count', label: 'Red Blood Cell Count (millions/cmm)' },
             { name: 'hypertension', label: 'Hypertension (0: No, 1: Yes)' },
-            { name 'diabetes_mellitus', label: 'Diabetes Mellitus (0: No, 1: Yes)' }
+            // --- THIS LINE IS NOW CORRECTED ---
+            { name: 'diabetes_mellitus', label: 'Diabetes Mellitus (0: No, 1: Yes)' }
         ],
         'liver': [
             { name: 'age', label: 'Age' }, { name: 'gender', label: 'Gender (1=M; 0=F)' },
