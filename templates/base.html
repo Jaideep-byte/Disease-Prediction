@@ -10,7 +10,6 @@
 
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
 </head>
 <body>
 
@@ -18,10 +17,8 @@
         <div class="container">
             <h1 class="logo">🩺 Disease Prediction System</h1>
             <nav class="nav-links">
-                <a href="{{ url_for('index') }}">Home</a>
+                <a href="{{ url_for('home') }}">Home</a>
                 <a href="{{ url_for('input_page') }}">Input</a>
-                <a href="{{ url_for('about') }}">About</a>
-                <a href="{{ url_for('contact') }}">Contact</a>
             </nav>
             <button class="theme-switch" id="theme-switch" aria-label="Toggle theme">
                 <i class="fas fa-moon"></i>
@@ -39,7 +36,9 @@
             <span>Health Assistant 🤖</span>
             <button id="chat-toggle">−</button>
         </div>
+
         <div id="chat-window"></div>
+
         <div id="chat-input-container">
             <input type="text" id="user-input" placeholder="Ask a health question..." autocomplete="off">
             <button id="send-btn">Send</button>
