@@ -81,7 +81,7 @@ def predict():
     feature_array = np.array([ordered_features]).reshape(1, -1)
     
     # --- ROBUST FILE PATHS ---
-    model_path = os.path.join(basedir, 'models', f'{disease}_model.pkl')
+    model_path = os.path.join(basedir, 'models', f'{disease}_xgboost_model.pkl')
     scaler_path = os.path.join(basedir, 'models', f'{disease}_scaler.pkl')
 
     try:
