@@ -4,29 +4,33 @@
 
 {% block content %}
 <div class="container">
-  <h1>Disease Diagnosis Input</h1>
+    <button class="theme-switch" id="theme-switch" aria-label="Toggle theme">
+        <i class="fas fa-moon"></i>
+    </button>
+  
+    <h1>Disease Diagnosis Input</h1>
 
-  <form action="{{ url_for('predict') }}" method="post" id="disease-form">
-    <div class="input-group">
-      <label for="disease">Select Disease</label>
-      <select id="disease" name="disease" required>
-        <option value="cancer">Breast Cancer</option>
-        <option value="diabetes">Diabetes</option>
-        <option value="heart">Heart Disease</option>
-        <option value="kidney">Kidney Disease</option>
-        <option value="liver">Liver Disease</option>
-      </select>
-    </div>
+    <form action="{{ url_for('predict') }}" method="post" id="disease-form">
+        <div class="input-group">
+            <label for="disease">Select Disease</label>
+            <select id="disease" name="disease" required>
+                <option value="">-- Please select a disease --</option>
+                <option value="cancer">Breast Cancer</option>
+                <option value="diabetes">Diabetes</option>
+                <option value="heart">Heart Disease</option>
+                <option value="kidney">Kidney Disease</option>
+                <option value="liver">Liver Disease</option>
+            </select>
+        </div>
 
-    <div id="input-fields">
-      </div>
+        <div id="input-fields">
+            </div>
 
-    <input type="submit" value="Predict Disease" class="predict-button" />
-  </form>
+        <input type="submit" value="Predict Disease" class="predict-button" />
+    </form>
 </div>
 {% endblock %}
 
 {% block extra_scripts %}
-<script src="{{ url_for('static', filename='input.js') }}"></script>
-{# The theme.js is already in base.html, so we don't need it here #}
+    <script src="{{ url_for('static', filename='input.js') }}"></script>
 {% endblock %}
