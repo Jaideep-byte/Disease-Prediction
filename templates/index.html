@@ -1,83 +1,77 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Disease Prediction Home</title>
-  <link rel="stylesheet" href="/static/style.css" />
-  <style>
-    /* Specific styles for the main page card */
-    .main-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        padding: 20px;
-    }
-    .card {
-        background-color: #ffffff;
-        padding: 40px;
-        border-radius: 15px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-        text-align: center;
-        max-width: 450px;
-        
-        /* --- CORRECTION STARTS HERE --- */
-        display: flex;          /* 1. Make the card a flex container */
-        flex-direction: column; /* 2. Stack items vertically */
-        align-items: center;    /* 3. Center all items horizontally */
-        /* --- CORRECTION ENDS HERE --- */
-    }
-    .title {
-        font-size: 2em;
-        color: #333;
-        margin-bottom: 20px;
-    }
-    .main-image {
-        width: 150px;
-        height: auto;
-        margin-bottom: 25px;
-    }
-    .info p {
-        font-size: 1.1em;
-        color: #555;
-        margin: 8px 0;
-    }
-    .start-btn {
-        background-color: #0077cc;
-        color: white;
-        padding: 14px 30px;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        font-size: 1.1rem;
-        font-weight: 600;
-        text-decoration: none;
-        display: inline-block;
-        margin-top: 25px;
-        transition: background-color 0.3s ease;
-        width: 100%;       /* Optional: Makes the button width more consistent */
-        max-width: 280px;  /* Optional: Prevents button from being too wide */
-    }
-    .start-btn:hover {
-        background-color: #005fa3;
-    }
-  </style>
-</head>
-<body>
-  <div class="main-container">
-    <div class="card">
-      <h1 class="title">Disease Prediction System</h1>
-      <img src="/static/heart_hands.png" alt="Health Image" class="main-image" />
-      
-      <div class="info">
-        <p><strong>Name:</strong> K. Jaideep Reddy</p>
-        <p><strong>Project:</strong> Multi-Disease Prediction using Machine Learning</p>
-      </div>
+{% extends "base.html" %}
 
-      <a href="/input_page" class="start-btn">Start Diagnosis</a>
+{% block title %}Disease Prediction Home{% endblock %}
 
+{% block content %}
+<style>
+  /* Specific styles for the main page card */
+  .main-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      padding: 20px;
+  }
+  .card {
+      background-color: #ffffff;
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      max-width: 450px;
+
+      /* Flex centering */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+  }
+  .title {
+      font-size: 2em;
+      color: #333;
+      margin-bottom: 20px;
+  }
+  .main-image {
+      width: 150px;
+      height: auto;
+      margin-bottom: 25px;
+  }
+  .info p {
+      font-size: 1.1em;
+      color: #555;
+      margin: 8px 0;
+  }
+  .start-btn {
+      background-color: #0077cc;
+      color: white;
+      padding: 14px 30px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1.1rem;
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-block;
+      margin-top: 25px;
+      transition: background-color 0.3s ease;
+      width: 100%;
+      max-width: 280px;
+  }
+  .start-btn:hover {
+      background-color: #005fa3;
+  }
+</style>
+
+<div class="main-container">
+  <div class="card">
+    <h1 class="title">Disease Prediction System</h1>
+    <img src="{{ url_for('static', filename='heart_hands.png') }}" alt="Health Image" class="main-image" />
+    
+    <div class="info">
+      <p><strong>Name:</strong> K. Jaideep Reddy</p>
+      <p><strong>Project:</strong> Multi-Disease Prediction using Machine Learning</p>
     </div>
+
+    <a href="{{ url_for('input_page') }}" class="start-btn">Start Diagnosis</a>
   </div>
-</body>
-</html>
+</div>
+{% endblock %}

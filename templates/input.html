@@ -1,61 +1,109 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Disease Input Form</title>
-  <link rel="stylesheet" href="/static/style.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-</head>
-<body>
-  <div class="container">
-    <button class="theme-switch" id="theme-switch" aria-label="Toggle theme">
-      <i class="fas fa-moon"></i>
-    </button>
-    <h1>Disease Diagnosis Input</h1>
-    
-    <form action="/predict" method="post" id="disease-form">
-      <div class="input-group">
-        <label for="disease">Select Disease</label>
-        <select id="disease" name="disease" required>
-          <option value="cancer">Breast Cancer</option>
-          <option value="diabetes">Diabetes</option>
-          <option value="heart">Heart Disease</option>
-          <option value="kidney">Kidney Disease</option>
-          <option value="liver">Liver Disease</option>
-        </select>
-      </div>
+{% extends "base.html" %}
 
-      <div id="input-fields">
-          </div>
+{% block title %}Disease Input Form{% endblock %}
 
-      <input type="submit" value="Predict Disease" />
-    </form>
-  </div>
+{% block content %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-  <div class="chatbot-container">
-    <div id="chatbot-toggler">
-      <i class="fas fa-comment-dots"></i>
+<style>
+  /* Local styles for this page */
+  .container {
+      max-width: 700px;
+      margin: 50px auto;
+      background: #ffffff;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 4px 25px rgba(0, 0, 0, 0.1);
+      position: relative;
+  }
+
+  h1 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 25px;
+  }
+
+  .input-group {
+      margin-bottom: 20px;
+  }
+
+  label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #333;
+  }
+
+  select, input[type="text"], input[type="number"], textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 1rem;
+      box-sizing: border-box;
+  }
+
+  input[type="submit"] {
+      display: block;
+      width: 100%;
+      background-color: #0077cc;
+      color: white;
+      padding: 14px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1.1rem;
+      font-weight: 600;
+      transition: background-color 0.3s ease;
+  }
+
+  input[type="submit"]:hover {
+      background-color: #005fa3;
+  }
+
+  /* Theme toggle */
+  .theme-switch {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: none;
+      border: none;
+      font-size: 1.4rem;
+      cursor: pointer;
+      color: #333;
+  }
+</style>
+
+<div class="container">
+  <button class="theme-switch" id="theme-switch" aria-label="Toggle theme">
+    <i class="fas fa-moon"></i>
+  </button>
+
+  <h1>Disease Diagnosis Input</h1>
+
+  <form action="{{ url_for('predict') }}" method="post" id="disease-form">
+    <div class="input-group">
+      <label for="disease">Select Disease</label>
+      <select id="disease" name="disease" required>
+        <option value="cancer">Breast Cancer</option>
+        <option value="diabetes">Diabetes</option>
+        <option value="heart">Heart Disease</option>
+        <option value="kidney">Kidney Disease</option>
+        <option value="liver">Liver Disease</option>
+      </select>
     </div>
-    <div class="chatbot">
-      <div class="chatbot-header">
-        <h2>Health Assistant</h2>
-      </div>
-      <ul class="chatbox">
-        <li class="chat incoming">
-          <i class="fas fa-robot"></i>
-          <p>Hi there! How can I help you today? Type 'help' to see what I know about.</p>
-        </li>
-      </ul>
-      <div class="chat-input">
-        <textarea placeholder="Enter a message..." required></textarea>
-        <span id="send-btn"><i class="fas fa-paper-plane"></i></span>
-      </div>
+
+    <div id="input-fields">
+      <!-- Dynamic input fields will appear here via JS -->
     </div>
-  </div>
-  
-  <script src="/static/input.js"></script>
-  <script src="/static/chatbot.js"></script>
-  <script src="/static/theme.js"></script> 
-</body>
-</html>
+
+    <input type="submit" value="Predict Disease" />
+  </form>
+</div>
+
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='input.js') }}"></script>
+<script src="{{ url_for('static', filename='theme.js') }}"></script>
+{% endblock %}

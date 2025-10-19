@@ -1,53 +1,39 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Diabetes Prediction Result</title>
-  <link rel="stylesheet" href="/static/style.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-</head>
-<body>
-  <div class="container">
-    <button class="theme-switch" id="theme-switch" aria-label="Toggle theme">
-      <i class="fas fa-moon"></i>
-    </button>
+{% extends "base.html" %}
 
-    <div class="result-card">
-      {% if "Not Diabetic" in result %}
-        <div class="result-icon negative"><i class="fas fa-check-circle"></i></div>
-        <h1>Prediction: <span class="result-text negative">{{ result }}</span></h1>
-      {% else %}
-        <div class="result-icon positive"><i class="fas fa-exclamation-triangle"></i></div>
-        <h1>Prediction: <span class="result-text positive">{{ result }}</span></h1>
-      {% endif %}
+{% block title %}Diabetes Prediction Result{% endblock %}
 
-      <p class="confidence-score">Confidence: <strong>{{ confidence }}%</strong></p>
-      
-      {% if recommendations %}
-      <div class="recommendations">
-          <h3>Personalized Recommendations</h3>
-          <p>Based on your inputs, you may want to discuss the following with your doctor:</p>
-          <ul>
-              {% for rec in recommendations %}
-                  <li>{{ rec }}</li>
-              {% endfor %}
-          </ul>
-          <small><i><b>Disclaimer:</b> This is not medical advice. Always consult a healthcare professional.</i></small>
-      </div>
-      {% endif %}
+{% block content %}
+  <div class="result-card">
+    {% if "Not Diabetic" in result %}
+      <div class="result-icon negative"><i class="fas fa-check-circle"></i></div>
+      <h1>Prediction: <span class="result-text negative">{{ result }}</span></h1>
+    {% else %}
+      <div class="result-icon positive"><i class="fas fa-exclamation-triangle"></i></div>
+      <h1>Prediction: <span class="result-text positive">{{ result }}</span></h1>
+    {% endif %}
 
-      {% if debug_data %}
-      <div class="recommendations" style="margin-top: 20px; background-color: #444; border-left-color: #666; text-align: left;">
-        <h3>Inputs Received by Server:</h3>
-        <pre style="white-space: pre-wrap; word-wrap: break-word; color: #eee;"><code>{{ debug_data }}</code></pre>
-      </div>
-      {% endif %}
-
-      <a href="/" class="predict-button">Back to Home</a>
+    <p class="confidence-score">Confidence: <strong>{{ confidence }}%</strong></p>
+    
+    {% if recommendations %}
+    <div class="recommendations">
+        <h3>Personalized Recommendations</h3>
+        <p>Based on your inputs, you may want to discuss the following with your doctor:</p>
+        <ul>
+            {% for rec in recommendations %}
+                <li>{{ rec }}</li>
+            {% endfor %}
+        </ul>
+        <small><i><b>Disclaimer:</b> This is not medical advice. Always consult a healthcare professional.</i></small>
     </div>
-  </div>
+    {% endif %}
 
-  <script src="/static/theme.js"></script>
-</body>
-</html>
+    {% if debug_data %}
+    <div class="recommendations" style="margin-top: 20px; background-color: #444; border-left-color: #666; text-align: left;">
+      <h3>Inputs Received by Server:</h3>
+      <pre style="white-space: pre-wrap; word-wrap: break-word; color: #eee;"><code>{{ debug_data }}</code></pre>
+    </div>
+    {% endif %}
+    
+    <a href="/" class="predict-button">Back to Home</a>
+  </div>
+{% endblock %}
