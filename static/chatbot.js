@@ -1,9 +1,18 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const chatbotToggler = document.querySelector("#chatbot-toggler");
+    // Corrected the selector to use a class, matching your base.html
+    const chatbotToggler = document.querySelector(".chatbot-toggler"); 
     const chatbotContainer = document.querySelector(".chatbot-container");
     const chatInput = document.querySelector(".chat-input textarea");
-    const sendChatBtn = document.querySelector("#send-btn");
+    // Corrected the selector to match the button's ID in base.html
+    const sendChatBtn = document.querySelector("#send-btn"); 
     const chatbox = document.querySelector(".chatbox");
+
+    // --- THIS IS THE FIX ---
+    // This event listener was missing. It toggles the chatbot's visibility.
+    chatbotToggler.addEventListener("click", () => {
+        chatbotContainer.classList.toggle("show-chatbot");
+    });
+    // ----------------------
 
     // --- The Chatbot's Expanded Brain ---
     const knowledgeBase = {
@@ -57,12 +66,11 @@ document.addEventListener("DOMContentLoaded", () => {
         const message = userMessage.toLowerCase();
         let botResponse = "I'm sorry, I don't have information on that topic. Type 'help' to see what I can answer.";
 
-        // Find the best response from the knowledge base
         for (const key in knowledgeBase) {
             const topic = knowledgeBase[key];
             if (topic.keywords.some(keyword => message.includes(keyword))) {
                 botResponse = topic.response;
-                break; // Stop searching once a match is found
+                break; 
             }
         }
 
@@ -78,17 +86,15 @@ document.addEventListener("DOMContentLoaded", () => {
         chatbox.appendChild(createChatLi(userMessage, "outgoing"));
         chatInput.value = "";
         chatbox.scrollTo(0, chatbox.scrollHeight);
-
-        // Add a "thinking" indicator
+        
         const thinkingLi = createChatLi("...", "incoming");
         chatbox.appendChild(thinkingLi);
         chatbox.scrollTo(0, chatbox.scrollHeight);
 
         setTimeout(() => {
-            // Remove "thinking" and get the real response
             thinkingLi.remove();
             generateResponse(userMessage);
-        }, 800); // A slightly longer delay to feel more natural
+        }, 800); 
     }
 
     sendChatBtn.addEventListener("click", handleChat);
@@ -99,4 +105,3 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 });
-
