@@ -3,16 +3,12 @@
 from flask import Flask, request, render_template
 import joblib
 import numpy as np
-import os # <-- ADD THIS LINE
+import os
 
-# --- THIS IS THE FIX ---
-# Get the absolute path of the directory where this file is located
-basedir = os.path.abspath(os.path.dirname(__file__))
-# Point to the templates folder
-template_folder_path = os.path.join(basedir, 'templates')
-# Explicitly tell Flask where to find the templates
-app = Flask(__name__, template_folder=template_folder_path)
-# ----------------------
+# --- This setup is cleaner ---
+app = Flask(__name__)
+basedir = os.path.abspath(os.path.dirname(__file__)) # Get base directory
+# ------------------------------
 
 
 # --- Recommendation Logic ---
@@ -33,13 +29,12 @@ def get_recommendations(disease, user_input):
             recommendations.append("Your cholesterol level is high. A diet low in saturated fats is recommended.")
 
     elif disease == 'kidney':
-        if user_input.get('blood_pressure', 0) > 80:
+        # Note: Corrected keys based on your feature_order dict
+        if user_input.get('bp', 0) > 80:
              recommendations.append("Your blood pressure appears elevated. Managing blood pressure is crucial for kidney health.")
-        if user_input.get('specific_gravity', 0) <= 1.010:
-             recommendations.append("Your specific gravity is low, which could indicate hydration issues or other concerns. Consult a doctor.")
-        if user_input.get('hemoglobin', 0) < 13.5:
+        if user_input.get('hemo', 0) < 13.5:
              recommendations.append("Your hemoglobin is on the lower side, which can be associated with kidney issues. A medical review is advised.")
-        if user_input.get('blood_glucose_random', 0) > 126:
+        if user_input.get('bgr', 0) > 126:
              recommendations.append("Elevated blood glucose can impact kidney function. Please discuss this with your healthcare provider.")
 
     elif disease == 'cancer':
@@ -69,49 +64,36 @@ def input_page():
 def predict():
     disease = request.form['disease']
     
-    form_values = {}
-    for key, value in request.form.items():
-        if key != 'disease':
-            try:
-                form_values[key] = float(value)
-            except (ValueError, TypeError):
-                form_values[key] = value
-    
-    input_data = list(form_values.values())
-    feature_array = np.array([float(i) for i in input_data]).reshape(1, -1)
+    # --- SAFER DATA HANDLING ---
+    form_values = {key: float(value) for key, value in request.form.items() if key != 'disease'}
 
-    model_filename_map = {
-        'cancer': 'brca_xgboost_model',
-        'diabetes': 'diabetes_xgboost_model_improved',
-        'heart': 'heart_xgboost_model',
-        'kidney': 'kidney_disease_xgboost_model',
-        'liver': 'liver_xgboost_model_improved'
-    }
-    scaler_filename_map = {
-        'cancer': 'brca_scaler',
-        'diabetes': 'diabetes_scaler',
-        'heart': 'heart_scaler',
-        'kidney': 'kidney_scaler',
-        'liver': 'liver_scaler'
+    # Define the exact order of features for each model
+    feature_order = {
+        'cancer': ['age', 'gender', 'protein1', 'protein2', 'protein3', 'protein4', 'tumour_stage', 'histology_Infiltrating_Ductal_Carcinoma', 'histology_Infiltrating_Lobular_Carcinoma', 'histology_Mucinous_Carcinoma', 'er_status', 'pr_status', 'her2_status', 'surgery_type'],
+        'diabetes': ['pregnancies', 'glucose', 'blood_pressure', 'skin_thickness', 'insulin', 'bmi', 'diabetes_pedigree_function', 'age'],
+        'heart': ['age', 'sex', 'cp', 'trestbps', 'chol', 'fbs', 'restecg', 'thalach', 'exang', 'oldpeak', 'slope', 'ca', 'thal'],
+        'kidney': ['age', 'bp', 'sg_1.005', 'sg_1.010', 'sg_1.015', 'sg_1.020', 'sg_1.025', 'al', 'su', 'rbc', 'pc', 'pcc', 'ba', 'bgr', 'bu', 'sc', 'sod', 'pot', 'hemo', 'pcv', 'wc', 'rc', 'htn', 'dm', 'cad', 'appet', 'pe', 'ane'],
+        'liver': ['age', 'gender', 'total_bilirubin', 'direct_bilirubin', 'alkaline_phosphotase', 'alamine_aminotransferase', 'aspartate_aminotransferase', 'total_protiens', 'albumin', 'albumin_and_globulin_ratio']
     }
 
-    model_name = model_filename_map.get(disease)
+    # Create the input array in the correct order
+    ordered_features = [form_values[feature] for feature in feature_order[disease]]
+    feature_array = np.array([ordered_features]).reshape(1, -1)
     
+    # --- ROBUST FILE PATHS ---
+    model_path = os.path.join(basedir, 'models', f'{disease}_model.pkl')
+    scaler_path = os.path.join(basedir, 'models', f'{disease}_scaler.pkl')
+
     try:
-        model_path = f'{model_name}.pkl'
         model = joblib.load(model_path)
     except FileNotFoundError:
         return f"Error: Model file not found at {model_path}", 400
 
-    if disease in scaler_filename_map:
-        try:
-            scaler_name = scaler_filename_map.get(disease)
-            scaler_path = f'{scaler_name}.pkl'
-            scaler = joblib.load(scaler_path)
-            feature_array = scaler.transform(feature_array)
-        except FileNotFoundError:
-            pass
+    if os.path.exists(scaler_path):
+        scaler = joblib.load(scaler_path)
+        feature_array = scaler.transform(feature_array)
 
+    # --- FILLED IN MISSING LOGIC ---
     prediction = model.predict(feature_array)[0]
     
     try:
@@ -134,6 +116,7 @@ def predict():
     template_name = f'result_{disease}.html'
     
     return render_template(template_name, result=result, confidence=confidence, recommendations=recs, debug_data=form_values)
+
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -3,82 +3,7 @@
 {% block title %}Disease Input Form{% endblock %}
 
 {% block content %}
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
-<style>
-  /* Local styles for this page */
-  .container {
-      max-width: 700px;
-      margin: 50px auto;
-      background: #ffffff;
-      padding: 40px;
-      border-radius: 12px;
-      box-shadow: 0 4px 25px rgba(0, 0, 0, 0.1);
-      position: relative;
-  }
-
-  h1 {
-      text-align: center;
-      color: #333;
-      margin-bottom: 25px;
-  }
-
-  .input-group {
-      margin-bottom: 20px;
-  }
-
-  label {
-      display: block;
-      font-weight: 600;
-      margin-bottom: 8px;
-      color: #333;
-  }
-
-  select, input[type="text"], input[type="number"], textarea {
-      width: 100%;
-      padding: 12px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      font-size: 1rem;
-      box-sizing: border-box;
-  }
-
-  input[type="submit"] {
-      display: block;
-      width: 100%;
-      background-color: #0077cc;
-      color: white;
-      padding: 14px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 1.1rem;
-      font-weight: 600;
-      transition: background-color 0.3s ease;
-  }
-
-  input[type="submit"]:hover {
-      background-color: #005fa3;
-  }
-
-  /* Theme toggle */
-  .theme-switch {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      background: none;
-      border: none;
-      font-size: 1.4rem;
-      cursor: pointer;
-      color: #333;
-  }
-</style>
-
 <div class="container">
-  <button class="theme-switch" id="theme-switch" aria-label="Toggle theme">
-    <i class="fas fa-moon"></i>
-  </button>
-
   <h1>Disease Diagnosis Input</h1>
 
   <form action="{{ url_for('predict') }}" method="post" id="disease-form">
@@ -94,16 +19,14 @@
     </div>
 
     <div id="input-fields">
-      <!-- Dynamic input fields will appear here via JS -->
-    </div>
+      </div>
 
-    <input type="submit" value="Predict Disease" />
+    <input type="submit" value="Predict Disease" class="predict-button" />
   </form>
 </div>
-
 {% endblock %}
 
 {% block extra_scripts %}
 <script src="{{ url_for('static', filename='input.js') }}"></script>
-<script src="{{ url_for('static', filename='theme.js') }}"></script>
+{# The theme.js is already in base.html, so we don't need it here #}
 {% endblock %}
