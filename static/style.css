@@ -105,7 +105,7 @@ input[type="submit"],
 .predict-button,
 .start-btn {
     background-color: var(--primary-color);
-    color: white;
+    color: rgb(243, 78, 78);
     padding: 14px 30px;
     border: none;
     border-radius: 8px;
