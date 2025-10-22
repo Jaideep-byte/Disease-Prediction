@@ -32,15 +32,67 @@ body {
     font-family: 'Poppins', sans-serif;
     background-color: var(--bg-color);
     color: var(--text-color);
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    /* --- EDITED: Removed flex properties --- */
     min-height: 100vh;
     margin: 0;
-    padding: 20px;
+    padding: 0; /* --- EDITED: Changed from 20px to 0 --- */
     box-sizing: border-box;
     transition: background-color 0.3s, color 0.3s;
 }
+
+/* --- ADDED: Page Header / Navigation --- */
+.page-header {
+    background-color: var(--card-bg-color);
+    padding: 15px 40px;
+    box-shadow: 0 4px 10px var(--shadow-color);
+    width: 100%;
+    box-sizing: border-box; /* Ensures padding doesn't add to width */
+
+    /* Sticky Top Position */
+    position: sticky;
+    top: 0;
+    z-index: 900; /* Below chatbot (1001) but above content */
+
+    /* Flexbox for layout */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.5rem; /* 24px */
+    font-weight: 600;
+    color: var(--text-color);
+    text-decoration: none;
+}
+
+.header-title span {
+    color: var(--primary-color);
+    font-size: 2rem; /* 32px */
+}
+
+.header-nav {
+    display: flex;
+    gap: 20px;
+}
+
+.header-nav a {
+    text-decoration: none;
+    color: var(--subtle-text-color);
+    font-size: 1.1rem;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.header-nav a:hover,
+.header-nav a.active {
+    color: var(--primary-color);
+}
+/* --- END OF ADDED SECTION --- */
+
 
 /* --- Main Home Page Container --- */
 .main-container {
@@ -48,6 +100,10 @@ body {
     justify-content: center;
     align-items: center;
     width: 100%;
+    /* --- EDITED: Added padding/min-height --- */
+    padding: 60px 20px 20px 20px; /* 60px top, 20px on sides/bottom */
+    box-sizing: border-box;
+    min-height: calc(100vh - 80px); /* Fill screen height minus header (approx) */
 }
 
 /* --- Card Styling (Correction Applied Here) --- */
@@ -105,7 +161,7 @@ input[type="submit"],
 .predict-button,
 .start-btn {
     background-color: var(--primary-color);
-    color: rgb(243, 78, 78);
+    color: rgb(255, 255, 255);
     padding: 14px 30px;
     border: none;
     border-radius: 8px;
